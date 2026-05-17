@@ -12,7 +12,7 @@ jobs:
     name: Workflow preflight
     runs-on: ubuntu-latest
     outputs:
-      solution-exists: ${{ steps.detect.outputs.solution-exists }}
+      solution_exists: ${{ steps.detect.outputs.solution_exists }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,16 +22,16 @@ jobs:
         shell: bash
         run: |
           if [[ -f './HoneyDrunk.AI.slnx' ]]; then
-            echo 'solution-exists=true' >> "$GITHUB_OUTPUT"
+            echo 'solution_exists=true' >> "$GITHUB_OUTPUT"
           else
-            echo 'solution-exists=false' >> "$GITHUB_OUTPUT"
+            echo 'solution_exists=false' >> "$GITHUB_OUTPUT"
             echo 'No ./HoneyDrunk.AI.slnx found yet; skipping .NET PR validation until the repo scaffold lands.' >> "$GITHUB_STEP_SUMMARY"
           fi
 
   pr-core:
     name: PR Core
     needs: preflight
-    if: needs.preflight.outputs.solution-exists == 'true'
+    if: needs.preflight.outputs.solution_exists == 'true'
     permissions:
       contents: read
       checks: write
