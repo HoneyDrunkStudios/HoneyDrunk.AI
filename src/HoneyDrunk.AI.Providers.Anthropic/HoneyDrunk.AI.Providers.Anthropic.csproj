@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><Description>HoneyDrunk.AI Anthropic provider package.</Description></PropertyGroup>
+  <ItemGroup><ProjectReference Include="..\HoneyDrunk.AI.Abstractions\HoneyDrunk.AI.Abstractions.csproj" /></ItemGroup>
+  <ItemGroup><PackageReference Include="HoneyDrunk.Standards" Version="0.2.7" PrivateAssets="all" /></ItemGroup>
+</Project>

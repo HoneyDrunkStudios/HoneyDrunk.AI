@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Dependency-light contracts for HoneyDrunk AI inference, routing, capabilities, embeddings, and cost accounting.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="HoneyDrunk.Standards" Version="0.2.7" PrivateAssets="all" />
+  </ItemGroup></Project>

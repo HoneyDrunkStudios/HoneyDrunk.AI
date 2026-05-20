@@ -1,0 +1,6 @@
+# Changelog
+
+## [0.1.0]
+
+- Introduced `HoneyDrunk.AI.Providers.Anthropic` for the ADR-0016 HoneyDrunk.AI scaffold.
+
