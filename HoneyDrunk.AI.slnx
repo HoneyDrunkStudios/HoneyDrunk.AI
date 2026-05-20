@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HoneyDrunk.AI.Abstractions/HoneyDrunk.AI.Abstractions.csproj" />
+    <Project Path="src/HoneyDrunk.AI.Providers.Anthropic/HoneyDrunk.AI.Providers.Anthropic.csproj" />
+    <Project Path="src/HoneyDrunk.AI.Providers.AzureOpenAI/HoneyDrunk.AI.Providers.AzureOpenAI.csproj" />
+    <Project Path="src/HoneyDrunk.AI.Providers.InMemory/HoneyDrunk.AI.Providers.InMemory.csproj" />
+    <Project Path="src/HoneyDrunk.AI.Providers.OpenAI/HoneyDrunk.AI.Providers.OpenAI.csproj" />
+    <Project Path="src/HoneyDrunk.AI/HoneyDrunk.AI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/HoneyDrunk.AI.Abstractions.Tests/HoneyDrunk.AI.Abstractions.Tests.csproj" />
+    <Project Path="tests/HoneyDrunk.AI.Providers.InMemory.Tests/HoneyDrunk.AI.Providers.InMemory.Tests.csproj" />
+    <Project Path="tests/HoneyDrunk.AI.Tests/HoneyDrunk.AI.Tests.csproj" />
+  </Folder>
+</Solution>
