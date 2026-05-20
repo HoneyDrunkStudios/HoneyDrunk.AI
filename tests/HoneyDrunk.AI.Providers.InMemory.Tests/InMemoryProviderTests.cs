@@ -38,4 +38,37 @@ public sealed class InMemoryProviderTests
         var second = await generator.GenerateAsync(["same"], new EmbeddingOptions(Dimensions: 4));
         Assert.Equal(first[0].Vector, second[0].Vector);
     }
+
+    /// <summary>Rejects invalid embedding dimensions.</summary>
+    [Fact]
+    public async Task EmbeddingGenerator_rejects_invalid_dimensions()
+    {
+        var generator = new InMemoryEmbeddingGenerator("inmemory:fast");
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => generator.GenerateAsync(["same"], new EmbeddingOptions(Dimensions: 0)));
+    }
+
+    /// <summary>Uses length-prefixed fingerprints so delimiter characters are unambiguous.</summary>
+    [Fact]
+    public void Fingerprint_handles_delimiter_characters()
+    {
+        var first = InMemoryChatClient.Fingerprint([new ChatMessage(ChatRole.User, "a:b\nc")]);
+        var second = InMemoryChatClient.Fingerprint([new ChatMessage(ChatRole.User, "a:b"), new ChatMessage(ChatRole.User, "c")]);
+        Assert.NotEqual(first, second);
+    }
+
+    /// <summary>Exposes matching clients and streaming-capable capabilities.</summary>
+    [Fact]
+    public async Task Provider_exposes_deterministic_clients()
+    {
+        var provider = new InMemoryModelProvider();
+        Assert.All(provider.DeclaredCapabilities, capability => Assert.True(capability.SupportsStreaming));
+
+        var chat = provider.GetChatClient("inmemory:fast");
+        var completion = await chat.CompleteAsync([new ChatMessage(ChatRole.User, "provider")]);
+        Assert.Equal("[InMemory:inmemory:fast] provider", completion.Message.Content);
+
+        var generator = provider.GetEmbeddingGenerator("inmemory:large");
+        var embeddings = await generator.GenerateAsync(["provider"]);
+        Assert.Equal("inmemory:large", embeddings[0].ModelId);
+    }
 }

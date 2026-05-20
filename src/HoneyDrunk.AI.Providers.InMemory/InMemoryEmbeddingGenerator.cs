@@ -13,6 +13,7 @@ public sealed class InMemoryEmbeddingGenerator : IEmbeddingGenerator
     /// <param name="modelId">The synthetic model id.</param>
     public InMemoryEmbeddingGenerator(string modelId)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(modelId);
         this.modelId = modelId;
     }
 
@@ -20,7 +21,9 @@ public sealed class InMemoryEmbeddingGenerator : IEmbeddingGenerator
     public Task<IReadOnlyList<Embedding>> GenerateAsync(IEnumerable<string> values, EmbeddingOptions? options = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        ArgumentNullException.ThrowIfNull(values);
         var dimensions = options?.Dimensions ?? 8;
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(dimensions);
         var embeddings = values.Select(value => new Embedding(value, BuildVector(value, dimensions), this.modelId)).ToArray();
         return Task.FromResult<IReadOnlyList<Embedding>>(embeddings);
     }

@@ -16,6 +16,7 @@ public sealed class InMemoryChatClient : IChatClient
     /// <param name="scriptedResponses">Scripted completions keyed by request fingerprint.</param>
     public InMemoryChatClient(string modelId, IReadOnlyDictionary<string, ChatCompletion>? scriptedResponses = null)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(modelId);
         this.modelId = modelId;
         this.scriptedResponses = scriptedResponses ?? new Dictionary<string, ChatCompletion>();
     }
@@ -24,6 +25,7 @@ public sealed class InMemoryChatClient : IChatClient
     public Task<ChatCompletion> CompleteAsync(IReadOnlyList<ChatMessage> messages, ChatOptions? options = null, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        ArgumentNullException.ThrowIfNull(messages);
         var fingerprint = Fingerprint(messages);
         if (this.scriptedResponses.TryGetValue(fingerprint, out var scripted))
         {
@@ -47,8 +49,27 @@ public sealed class InMemoryChatClient : IChatClient
     /// <returns>A SHA-256 fingerprint.</returns>
     public static string Fingerprint(IReadOnlyList<ChatMessage> messages)
     {
-        var joined = string.Join("\n", messages.Select(message => $"{message.Role}:{message.Name}:{message.Content}"));
-        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(joined))).ToLowerInvariant();
+        ArgumentNullException.ThrowIfNull(messages);
+        var canonical = new StringBuilder();
+        foreach (var message in messages)
+        {
+            AppendLengthPrefixed(canonical, message.Role.ToString());
+            AppendLengthPrefixed(canonical, message.Name);
+            AppendLengthPrefixed(canonical, message.Content);
+        }
+
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(canonical.ToString()))).ToLowerInvariant();
+    }
+
+    private static void AppendLengthPrefixed(StringBuilder builder, string? value)
+    {
+        if (value is null)
+        {
+            builder.Append("-1:");
+            return;
+        }
+
+        builder.Append(value.Length).Append(':').Append(value).Append(';');
     }
 
     private static int EstimateTokens(IEnumerable<string> values) => Math.Max(1, values.Sum(value => value.Length) / 4);

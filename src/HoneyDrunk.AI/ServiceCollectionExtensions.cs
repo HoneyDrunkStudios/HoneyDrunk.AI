@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
     /// <returns>The same service collection.</returns>
     public static IServiceCollection AddHoneyDrunkAI(this IServiceCollection services, Action<AIOptions>? configure = null)
     {
+        services.AddOptions<AIOptions>();
         if (configure is not null)
         {
             services.Configure(configure);
