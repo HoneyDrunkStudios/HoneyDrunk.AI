@@ -3,6 +3,8 @@ name: PR
 on:
   pull_request:
     branches: [ main ]
+  push:
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -31,7 +33,7 @@ jobs:
   pr-core:
     name: PR Core
     needs: preflight
-    if: needs.preflight.outputs.solution_exists == 'true'
+    if: github.event_name == 'pull_request' && needs.preflight.outputs.solution_exists == 'true'
     permissions:
       contents: read
       checks: write
@@ -55,7 +57,18 @@ jobs:
   sonarcloud:
     name: SonarQube Cloud
     needs: [preflight, pr-core]
-    if: needs.preflight.outputs.solution_exists == 'true'
+    # Runs on:
+    #   - pull_request (same-repo, after pr-core succeeds) for PR-time analysis
+    #   - push to main (standalone, after preflight) for main-branch analysis
+    #     that populates the SonarCloud Overview dashboard and leak-period baseline.
+    # `always()` is required because pr-core is skipped on push events; without
+    # it, GitHub Actions skips downstream jobs whose declared `needs:` was skipped.
+    # Preflight gate stays so a missing solution scaffold still skips analysis cleanly.
+    if: |
+      always() && needs.preflight.outputs.solution_exists == 'true' && (
+        (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && needs.pr-core.result == 'success') ||
+        (github.event_name == 'push' && github.ref == 'refs/heads/main')
+      )
     permissions:
       contents: read
       checks: write
