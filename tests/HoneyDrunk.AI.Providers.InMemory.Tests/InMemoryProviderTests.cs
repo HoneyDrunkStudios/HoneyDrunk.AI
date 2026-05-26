@@ -1,5 +1,5 @@
-using HoneyDrunk.AI.Abstractions;
-using HoneyDrunk.AI.Providers.InMemory;
+using HoneyDrunk.AI.Abstractions.Chat;
+using HoneyDrunk.AI.Abstractions.Embeddings;
 using Xunit;
 
 namespace HoneyDrunk.AI.Providers.InMemory.Tests;
@@ -54,6 +54,13 @@ public sealed class InMemoryProviderTests
         var first = InMemoryChatClient.Fingerprint([new ChatMessage(ChatRole.User, "a:b\nc")]);
         var second = InMemoryChatClient.Fingerprint([new ChatMessage(ChatRole.User, "a:b"), new ChatMessage(ChatRole.User, "c")]);
         Assert.NotEqual(first, second);
+    }
+
+    /// <summary>Rejects a null scripted-response dictionary at construction time.</summary>
+    [Fact]
+    public void Provider_rejects_null_scripted_responses()
+    {
+        Assert.Throws<ArgumentNullException>(() => new InMemoryModelProvider(null!));
     }
 
     /// <summary>Exposes matching clients and streaming-capable capabilities.</summary>

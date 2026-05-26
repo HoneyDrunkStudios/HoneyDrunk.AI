@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Chat;
 
 /// <summary>Role assigned to a chat message.</summary>
 public enum ChatRole

@@ -1,4 +1,4 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Providers;
 
 namespace HoneyDrunk.AI.Providers.InMemory;
 

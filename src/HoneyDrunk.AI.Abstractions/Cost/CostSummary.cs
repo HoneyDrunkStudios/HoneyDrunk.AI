@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Cost;
 
 /// <summary>Summarizes recorded cost for a scope.</summary>
 /// <param name="Scope">Caller-defined scope.</param>

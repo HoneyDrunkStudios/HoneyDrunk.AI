@@ -1,26 +1,19 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Routing;
 using HoneyDrunk.Vault.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace HoneyDrunk.AI.Routing;
 
 /// <summary>Loads the active routing policy from configuration and DI-registered policies.</summary>
-public sealed class PolicyLoader
+/// <remarks>Initializes a new instance of the <see cref="PolicyLoader"/> class.</remarks>
+/// <param name="configProvider">The Vault configuration provider.</param>
+/// <param name="policies">Registered policies.</param>
+/// <param name="options">Runtime options used as configuration defaults.</param>
+public sealed class PolicyLoader(IConfigProvider configProvider, IEnumerable<IRoutingPolicy> policies, IOptions<AIOptions> options)
 {
-    private readonly IConfigProvider configProvider;
-    private readonly IReadOnlyList<IRoutingPolicy> policies;
-    private readonly IOptions<AIOptions> options;
-
-    /// <summary>Initializes a new instance of the <see cref="PolicyLoader"/> class.</summary>
-    /// <param name="configProvider">The Vault configuration provider.</param>
-    /// <param name="policies">Registered policies.</param>
-    /// <param name="options">Runtime options used as configuration defaults.</param>
-    public PolicyLoader(IConfigProvider configProvider, IEnumerable<IRoutingPolicy> policies, IOptions<AIOptions> options)
-    {
-        this.configProvider = configProvider ?? throw new ArgumentNullException(nameof(configProvider));
-        this.policies = (policies ?? throw new ArgumentNullException(nameof(policies))).ToArray();
-        this.options = options ?? throw new ArgumentNullException(nameof(options));
-    }
+    private readonly IConfigProvider configProvider = configProvider ?? throw new ArgumentNullException(nameof(configProvider));
+    private readonly IReadOnlyList<IRoutingPolicy> policies = [.. policies ?? throw new ArgumentNullException(nameof(policies))];
+    private readonly IOptions<AIOptions> options = options ?? throw new ArgumentNullException(nameof(options));
 
     /// <summary>Loads the active policy.</summary>
     /// <param name="cancellationToken">Cancellation token.</param>

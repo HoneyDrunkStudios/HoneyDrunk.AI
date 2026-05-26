@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Chat;
 
 /// <summary>Summarizes a chat request for model routing.</summary>
 /// <param name="EstimatedInputTokens">Estimated input tokens.</param>

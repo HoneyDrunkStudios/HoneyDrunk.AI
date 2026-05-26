@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Chat;
 
 /// <summary>Represents a completed chat response.</summary>
 /// <param name="Message">The assistant message.</param>

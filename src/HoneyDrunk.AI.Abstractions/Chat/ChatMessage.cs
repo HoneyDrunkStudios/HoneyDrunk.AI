@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Chat;
 
 /// <summary>Represents a single chat message.</summary>
 /// <param name="Role">The message role.</param>

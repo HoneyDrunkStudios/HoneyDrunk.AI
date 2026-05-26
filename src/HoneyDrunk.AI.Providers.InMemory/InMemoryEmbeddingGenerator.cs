@@ -1,4 +1,4 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Embeddings;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -28,7 +28,7 @@ public sealed class InMemoryEmbeddingGenerator : IEmbeddingGenerator
         return Task.FromResult<IReadOnlyList<Embedding>>(embeddings);
     }
 
-    private static IReadOnlyList<float> BuildVector(string value, int dimensions)
+    private static float[] BuildVector(string value, int dimensions)
     {
         var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(value));
         var vector = new float[dimensions];

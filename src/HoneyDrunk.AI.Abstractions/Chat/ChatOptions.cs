@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Chat;
 
 /// <summary>Options for a chat completion request.</summary>
 /// <param name="Temperature">Optional sampling temperature.</param>

@@ -1,23 +1,20 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Chat;
+using HoneyDrunk.AI.Abstractions.Embeddings;
+using HoneyDrunk.AI.Abstractions.Providers;
 
 namespace HoneyDrunk.AI.Providers.InMemory;
 
 /// <summary>Deterministic local model provider for tests, evals, and canary projects.</summary>
-public sealed class InMemoryModelProvider : IModelProvider
+/// <remarks>Initializes a new instance of the <see cref="InMemoryModelProvider"/> class.</remarks>
+/// <param name="scriptedResponses">Scripted completions keyed by request fingerprint.</param>
+public sealed class InMemoryModelProvider(IReadOnlyDictionary<string, ChatCompletion> scriptedResponses) : IModelProvider
 {
-    private readonly IReadOnlyDictionary<string, ChatCompletion> scriptedResponses;
+    private readonly IReadOnlyDictionary<string, ChatCompletion> scriptedResponses = scriptedResponses ?? throw new ArgumentNullException(nameof(scriptedResponses));
 
     /// <summary>Initializes a new instance of the <see cref="InMemoryModelProvider"/> class.</summary>
     public InMemoryModelProvider()
         : this(new Dictionary<string, ChatCompletion>())
     {
-    }
-
-    /// <summary>Initializes a new instance of the <see cref="InMemoryModelProvider"/> class.</summary>
-    /// <param name="scriptedResponses">Scripted completions keyed by request fingerprint.</param>
-    public InMemoryModelProvider(IReadOnlyDictionary<string, ChatCompletion> scriptedResponses)
-    {
-        this.scriptedResponses = scriptedResponses;
     }
 
     /// <inheritdoc />

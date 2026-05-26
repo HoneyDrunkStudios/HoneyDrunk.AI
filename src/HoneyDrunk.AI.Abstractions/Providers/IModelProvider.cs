@@ -1,4 +1,7 @@
-namespace HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Chat;
+using HoneyDrunk.AI.Abstractions.Embeddings;
+
+namespace HoneyDrunk.AI.Abstractions.Providers;
 
 /// <summary>Exposes model clients and capability declarations for one provider.</summary>
 public interface IModelProvider

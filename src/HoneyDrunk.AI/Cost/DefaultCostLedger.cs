@@ -1,4 +1,4 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Cost;
 
 namespace HoneyDrunk.AI.Cost;
 
@@ -7,7 +7,7 @@ public sealed class DefaultCostLedger : ICostLedger
 {
     private const int DefaultMaxEntries = 10_000;
     private readonly object gate = new();
-    private readonly List<Entry> entries = new();
+    private readonly List<Entry> entries = [];
     private readonly int maxEntries;
 
     /// <summary>Initializes a new instance of the <see cref="DefaultCostLedger"/> class.</summary>
@@ -44,7 +44,7 @@ public sealed class DefaultCostLedger : ICostLedger
         Entry[] snapshot;
         lock (this.gate)
         {
-            snapshot = this.entries.ToArray();
+            snapshot = [.. this.entries];
         }
 
         var scoped = snapshot.Where(entry => entry.RecordedAt >= since && IsInScope(entry.Cost.OperationCorrelationId, scope)).ToArray();

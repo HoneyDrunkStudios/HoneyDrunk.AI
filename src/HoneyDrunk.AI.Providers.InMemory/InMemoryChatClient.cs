@@ -1,4 +1,4 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Chat;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;

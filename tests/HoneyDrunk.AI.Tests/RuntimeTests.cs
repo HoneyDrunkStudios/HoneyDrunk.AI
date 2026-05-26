@@ -1,4 +1,7 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Chat;
+using HoneyDrunk.AI.Abstractions.Cost;
+using HoneyDrunk.AI.Abstractions.Embeddings;
+using HoneyDrunk.AI.Abstractions.Providers;
 using HoneyDrunk.AI.Cost;
 using HoneyDrunk.AI.Routing;
 using HoneyDrunk.Vault.Abstractions;
@@ -18,6 +21,13 @@ public sealed class RuntimeTests
         var router = new DefaultModelRouter(providers);
         var routed = await router.RouteAsync(new ChatRequestSummary(100, 100, []), new CostFirstRoutingPolicy());
         Assert.Equal("cheap", routed.ProviderId);
+    }
+
+    /// <summary>Rejects a null provider enumerable at construction time.</summary>
+    [Fact]
+    public void DefaultModelRouter_rejects_null_providers()
+    {
+        Assert.Throws<ArgumentNullException>(() => new DefaultModelRouter(null!));
     }
 
     /// <summary>Accumulates scoped costs.</summary>
@@ -73,17 +83,11 @@ public sealed class RuntimeTests
         public Task<string?> TryGetValueAsync(string key, CancellationToken cancellationToken = default) => Task.FromResult<string?>(null);
     }
 
-    private sealed class TestProvider : IModelProvider
+    private sealed class TestProvider(string providerId, decimal cost) : IModelProvider
     {
-        private readonly decimal cost;
+        private readonly decimal cost = cost;
 
-        public TestProvider(string providerId, decimal cost)
-        {
-            this.ProviderId = providerId;
-            this.cost = cost;
-        }
-
-        public string ProviderId { get; }
+        public string ProviderId { get; } = providerId;
 
         public ModelCapabilityDeclaration[] DeclaredCapabilities => [new(this.ProviderId, $"{this.ProviderId}:model", 4096, false, false, false, ["local"], this.cost, 0m)];
 

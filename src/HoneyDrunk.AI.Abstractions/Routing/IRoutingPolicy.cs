@@ -1,4 +1,6 @@
-namespace HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Chat;
+
+namespace HoneyDrunk.AI.Abstractions.Routing;
 
 /// <summary>Chooses one model candidate for a request.</summary>
 public interface IRoutingPolicy

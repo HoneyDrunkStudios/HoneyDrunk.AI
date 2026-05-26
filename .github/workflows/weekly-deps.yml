@@ -6,9 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+  contents: read
 
 jobs:
   preflight:
@@ -35,6 +33,10 @@ jobs:
     name: Weekly Dependencies
     needs: preflight
     if: needs.preflight.outputs.solution_exists == 'true'
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
     uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/nightly-deps.yml@main
     with:
       dotnet-version: '10.0.x'

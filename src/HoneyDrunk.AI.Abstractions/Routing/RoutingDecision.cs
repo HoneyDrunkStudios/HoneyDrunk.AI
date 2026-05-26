@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Routing;
 
 /// <summary>Represents a routing policy decision.</summary>
 /// <param name="Selected">The selected model candidate.</param>
