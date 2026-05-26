@@ -1,18 +1,15 @@
-using HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Chat;
+using HoneyDrunk.AI.Abstractions.Providers;
+using HoneyDrunk.AI.Abstractions.Routing;
 
 namespace HoneyDrunk.AI.Routing;
 
 /// <summary>Routes requests across declared model provider capabilities.</summary>
-public sealed class DefaultModelRouter : IModelRouter
+/// <remarks>Initializes a new instance of the <see cref="DefaultModelRouter"/> class.</remarks>
+/// <param name="providers">Registered model providers.</param>
+public sealed class DefaultModelRouter(IEnumerable<IModelProvider> providers) : IModelRouter
 {
-    private readonly IReadOnlyList<IModelProvider> providers;
-
-    /// <summary>Initializes a new instance of the <see cref="DefaultModelRouter"/> class.</summary>
-    /// <param name="providers">Registered model providers.</param>
-    public DefaultModelRouter(IEnumerable<IModelProvider> providers)
-    {
-        this.providers = providers.ToArray();
-    }
+    private readonly IReadOnlyList<IModelProvider> providers = [.. providers];
 
     /// <inheritdoc />
     public Task<RoutedModel> RouteAsync(ChatRequestSummary request, IRoutingPolicy policy, CancellationToken cancellationToken = default)

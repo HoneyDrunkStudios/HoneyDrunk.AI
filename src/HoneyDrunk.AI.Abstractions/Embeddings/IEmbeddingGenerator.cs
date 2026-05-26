@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Embeddings;
 
 /// <summary>Generates embeddings for text values.</summary>
 public interface IEmbeddingGenerator

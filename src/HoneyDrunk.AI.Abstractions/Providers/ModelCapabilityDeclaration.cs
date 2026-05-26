@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Providers;
 
 /// <summary>Declares a model's provider-owned capabilities and cost hints.</summary>
 /// <param name="ProviderId">The provider identifier.</param>

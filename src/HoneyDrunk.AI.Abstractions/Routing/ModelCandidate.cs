@@ -1,4 +1,6 @@
-namespace HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Providers;
+
+namespace HoneyDrunk.AI.Abstractions.Routing;
 
 /// <summary>Represents a candidate model for policy evaluation.</summary>
 /// <param name="ProviderId">The candidate provider.</param>

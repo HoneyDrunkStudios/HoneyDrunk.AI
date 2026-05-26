@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Chat;
 
 /// <summary>Represents an incremental streaming chat update.</summary>
 /// <param name="Delta">The streamed text delta.</param>

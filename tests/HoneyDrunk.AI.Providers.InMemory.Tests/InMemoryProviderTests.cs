@@ -1,5 +1,5 @@
-using HoneyDrunk.AI.Abstractions;
-using HoneyDrunk.AI.Providers.InMemory;
+using HoneyDrunk.AI.Abstractions.Chat;
+using HoneyDrunk.AI.Abstractions.Embeddings;
 using Xunit;
 
 namespace HoneyDrunk.AI.Providers.InMemory.Tests;

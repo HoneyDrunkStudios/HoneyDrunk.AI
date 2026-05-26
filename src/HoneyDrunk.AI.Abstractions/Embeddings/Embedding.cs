@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Embeddings;
 
 /// <summary>Represents an embedding vector for a source value.</summary>
 /// <param name="Value">The source value.</param>

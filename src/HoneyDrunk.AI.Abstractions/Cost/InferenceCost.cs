@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Cost;
 
 /// <summary>Represents estimated inference cost for a single operation.</summary>
 /// <param name="ProviderId">The provider identifier.</param>

@@ -1,4 +1,6 @@
-namespace HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Providers;
+
+namespace HoneyDrunk.AI.Abstractions.Routing;
 
 /// <summary>Represents the routed provider/model selection.</summary>
 /// <param name="ProviderId">The selected provider.</param>

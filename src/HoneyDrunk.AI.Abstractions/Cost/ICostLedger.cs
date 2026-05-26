@@ -1,4 +1,4 @@
-namespace HoneyDrunk.AI.Abstractions;
+namespace HoneyDrunk.AI.Abstractions.Cost;
 
 /// <summary>Records and summarizes inference cost.</summary>
 public interface ICostLedger

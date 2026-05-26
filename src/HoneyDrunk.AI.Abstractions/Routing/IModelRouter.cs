@@ -1,4 +1,6 @@
-namespace HoneyDrunk.AI.Abstractions;
+using HoneyDrunk.AI.Abstractions.Chat;
+
+namespace HoneyDrunk.AI.Abstractions.Routing;
 
 /// <summary>Routes requests to declared models using a supplied policy.</summary>
 public interface IModelRouter
