@@ -9,7 +9,7 @@ namespace HoneyDrunk.AI.Routing;
 /// <param name="providers">Registered model providers.</param>
 public sealed class DefaultModelRouter(IEnumerable<IModelProvider> providers) : IModelRouter
 {
-    private readonly IReadOnlyList<IModelProvider> providers = [.. providers];
+    private readonly IReadOnlyList<IModelProvider> providers = [.. providers ?? throw new ArgumentNullException(nameof(providers))];
 
     /// <inheritdoc />
     public Task<RoutedModel> RouteAsync(ChatRequestSummary request, IRoutingPolicy policy, CancellationToken cancellationToken = default)

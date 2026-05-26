@@ -9,7 +9,7 @@ namespace HoneyDrunk.AI.Providers.InMemory;
 /// <param name="scriptedResponses">Scripted completions keyed by request fingerprint.</param>
 public sealed class InMemoryModelProvider(IReadOnlyDictionary<string, ChatCompletion> scriptedResponses) : IModelProvider
 {
-    private readonly IReadOnlyDictionary<string, ChatCompletion> scriptedResponses = scriptedResponses;
+    private readonly IReadOnlyDictionary<string, ChatCompletion> scriptedResponses = scriptedResponses ?? throw new ArgumentNullException(nameof(scriptedResponses));
 
     /// <summary>Initializes a new instance of the <see cref="InMemoryModelProvider"/> class.</summary>
     public InMemoryModelProvider()
