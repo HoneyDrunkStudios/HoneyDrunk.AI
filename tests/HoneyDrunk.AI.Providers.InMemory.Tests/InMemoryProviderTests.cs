@@ -56,6 +56,13 @@ public sealed class InMemoryProviderTests
         Assert.NotEqual(first, second);
     }
 
+    /// <summary>Rejects a null scripted-response dictionary at construction time.</summary>
+    [Fact]
+    public void Provider_rejects_null_scripted_responses()
+    {
+        Assert.Throws<ArgumentNullException>(() => new InMemoryModelProvider(null!));
+    }
+
     /// <summary>Exposes matching clients and streaming-capable capabilities.</summary>
     [Fact]
     public async Task Provider_exposes_deterministic_clients()

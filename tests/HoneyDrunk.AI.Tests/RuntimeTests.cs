@@ -23,6 +23,13 @@ public sealed class RuntimeTests
         Assert.Equal("cheap", routed.ProviderId);
     }
 
+    /// <summary>Rejects a null provider enumerable at construction time.</summary>
+    [Fact]
+    public void DefaultModelRouter_rejects_null_providers()
+    {
+        Assert.Throws<ArgumentNullException>(() => new DefaultModelRouter(null!));
+    }
+
     /// <summary>Accumulates scoped costs.</summary>
     [Fact]
     public async Task DefaultCostLedger_accumulates_scope()
