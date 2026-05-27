@@ -12,28 +12,18 @@ permissions:
 jobs:
   preflight:
     name: Workflow preflight
-    runs-on: ubuntu-latest
-    outputs:
-      solution_exists: ${{ steps.detect.outputs.solution_exists }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Detect solution scaffold
-        id: detect
-        shell: bash
-        run: |
-          if [[ -f './HoneyDrunk.AI.slnx' ]]; then
-            echo 'solution_exists=true' >> "$GITHUB_OUTPUT"
-          else
-            echo 'solution_exists=false' >> "$GITHUB_OUTPUT"
-            echo 'No ./HoneyDrunk.AI.slnx found yet; skipping .NET PR validation until the repo scaffold lands.' >> "$GITHUB_STEP_SUMMARY"
-          fi
+    permissions:
+      contents: read
+    uses: HoneyDrunkStudios/HoneyDrunk.Actions/.github/workflows/job-solution-preflight.yml@main
+    with:
+      runs-on: 'ubuntu-latest'
+      project-path: './HoneyDrunk.AI.slnx'
+      missing-message: 'No ./HoneyDrunk.AI.slnx found yet; skipping .NET PR validation until the repo scaffold lands.'
 
   pr-core:
     name: PR Core
     needs: preflight
-    if: github.event_name == 'pull_request' && needs.preflight.outputs.solution_exists == 'true'
+    if: github.event_name == 'pull_request' && needs.preflight.outputs.project-exists == 'true'
     permissions:
       contents: read
       checks: write
@@ -65,7 +55,7 @@ jobs:
     # it, GitHub Actions skips downstream jobs whose declared `needs:` was skipped.
     # Preflight gate stays so a missing solution scaffold still skips analysis cleanly.
     if: |
-      always() && needs.preflight.outputs.solution_exists == 'true' && (
+      always() && needs.preflight.outputs.project-exists == 'true' && (
         (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && needs.pr-core.result == 'success') ||
         (github.event_name == 'push' && github.ref == 'refs/heads/main')
       )
