@@ -22,7 +22,7 @@ jobs:
   nightly-security:
     name: Nightly Security
     needs: preflight
-    if: needs.preflight.outputs.project-exists == 'true'
+    if: needs.preflight.outputs['project-exists'] == 'true'
     permissions:
       contents: read
       security-events: write

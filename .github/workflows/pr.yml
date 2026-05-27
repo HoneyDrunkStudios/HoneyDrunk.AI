@@ -23,7 +23,7 @@ jobs:
   pr-core:
     name: PR Core
     needs: preflight
-    if: github.event_name == 'pull_request' && needs.preflight.outputs.project-exists == 'true'
+    if: github.event_name == 'pull_request' && needs.preflight.outputs['project-exists'] == 'true'
     permissions:
       contents: read
       checks: write
@@ -55,7 +55,7 @@ jobs:
     # it, GitHub Actions skips downstream jobs whose declared `needs:` was skipped.
     # Preflight gate stays so a missing solution scaffold still skips analysis cleanly.
     if: |
-      always() && needs.preflight.outputs.project-exists == 'true' && (
+      always() && needs.preflight.outputs['project-exists'] == 'true' && (
         (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && needs.pr-core.result == 'success') ||
         (github.event_name == 'push' && github.ref == 'refs/heads/main')
       )

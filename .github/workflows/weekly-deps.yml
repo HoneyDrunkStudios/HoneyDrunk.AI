@@ -22,7 +22,7 @@ jobs:
   weekly-deps:
     name: Weekly Dependencies
     needs: preflight
-    if: needs.preflight.outputs.project-exists == 'true'
+    if: needs.preflight.outputs['project-exists'] == 'true'
     permissions:
       contents: write
       pull-requests: write
