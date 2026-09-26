@@ -9,6 +9,8 @@ HoneyDrunk.AI is the Grid AI Node for inference contracts, model routing, cost a
 - `HoneyDrunk.AI.Providers.InMemory` — deterministic local provider for tests, evals, and canaries.
 - `HoneyDrunk.AI.Providers.OpenAI`, `HoneyDrunk.AI.Providers.Anthropic`, `HoneyDrunk.AI.Providers.AzureOpenAI` — ADR-0016 follow-up provider slots.
 
+The three external provider slots currently throw `NotImplementedException` and are deliberately non-packable. Releases include only Abstractions, the core runtime, and the working InMemory provider. External provider packages require implementation and validation before their first publication.
+
 ## For downstream consumers — canary projects
 
 ```csharp

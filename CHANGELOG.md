@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.2.1] - 2026-09-26
+
+### Changed
+
+- Refresh stable NuGet dependencies; preserve target frameworks and HoneyDrunk public contracts.
+- Exclude the unimplemented OpenAI, Anthropic, and AzureOpenAI provider slots from package publication. Their methods still throw `NotImplementedException`; implementing them is separate work.
+
+| Dependency | Previous | Updated |
+| --- | --- | --- |
+| Microsoft.Extensions.DependencyInjection.Abstractions | 10.0.8 | 10.0.12 |
+| Microsoft.Extensions.Hosting.Abstractions | 10.0.8 | 10.0.12 |
+| Microsoft.Extensions.Logging.Abstractions | 10.0.8 | 10.0.12 |
+| Microsoft.Extensions.Options.ConfigurationExtensions | 10.0.8 | 10.0.12 |
+
+
+
+
+### Verified HoneyDrunk dependencies
+
+- HoneyDrunk.Kernel: 0.8.0 -> 0.8.1 (verified on NuGet.org).
+- HoneyDrunk.Standards: 0.2.9 -> 0.3.0 (verified on NuGet.org).
+- HoneyDrunk.Standards.Tests: 0.2.9 -> 0.3.0 (verified on NuGet.org).
+- HoneyDrunk.Vault: 0.5.0 -> 0.8.1 (verified on NuGet.org).
+
 ## [Unreleased]
 
 ### Changed (breaking)

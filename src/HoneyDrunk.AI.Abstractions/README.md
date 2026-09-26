@@ -5,7 +5,7 @@ Contracts for chat, embeddings, providers, routing, model capabilities, and infe
 ## Install
 
 ```bash
-dotnet add package HoneyDrunk.AI.Abstractions --version 0.2.0
+dotnet add package HoneyDrunk.AI.Abstractions --version 0.2.1
 ```
 
 ## Public API

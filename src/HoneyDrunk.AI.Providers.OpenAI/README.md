@@ -2,11 +2,9 @@
 
 OpenAI provider slot; implementation deferred to an ADR-0016 follow-up.
 
-## Install
+## Release status
 
-```bash
-dotnet add package HoneyDrunk.AI.Providers.OpenAI --version 0.2.0
-```
+Audited, not released. This provider is non-packable while its client methods throw `NotImplementedException`. Implementation and validation are required before NuGet installation is available.
 
 ## Public API
 
