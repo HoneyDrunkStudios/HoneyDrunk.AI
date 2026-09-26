@@ -80,9 +80,6 @@ jobs:
         HoneyDrunk.AI.Abstractions
         HoneyDrunk.AI
         HoneyDrunk.AI.Providers.InMemory
-        HoneyDrunk.AI.Providers.OpenAI
-        HoneyDrunk.AI.Providers.Anthropic
-        HoneyDrunk.AI.Providers.AzureOpenAI
       release-docs-url: 'https://github.com/HoneyDrunkStudios/HoneyDrunk.AI#readme'
       actions-ref: 'main'
     secrets:
