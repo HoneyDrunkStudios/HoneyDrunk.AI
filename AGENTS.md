@@ -26,4 +26,4 @@ Apply the [shared review criteria](https://github.com/HoneyDrunkStudios/HoneyDru
 
 - Keep inference contracts, routing and cost accounting provider-neutral; SDK details stay in provider slots. Verify implemented providers before recommending reuse: external provider stubs and InMemory tests do not establish a working external integration.
 - Trace untrusted prompts/output, tool permissions, tenant context and budget decisions through retries, cancellation and provider failure. Flag prompt-driven authority escalation, context/secret leakage, unbounded token/tool loops or retries that defeat a budget stop.
-- Require routing, cost/usage, isolation and provider-failure contract tests for changed behavior. Separate deterministic test evidence from model-quality claims; do not invoke paid inference or invent a generic agent framework to complete review.
+- Require routing, cost/usage, isolation and provider-failure contract tests when the changed behavior affects those concerns. Separate deterministic test evidence from model-quality claims; do not invoke paid inference or invent a generic agent framework to complete review.
