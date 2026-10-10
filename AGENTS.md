@@ -19,3 +19,11 @@ dotnet test HoneyDrunk.AI.slnx -c Release --no-build
 ```
 
 Use the checked-in workflow and relevant test documentation for additional integration prerequisites, coverage and consumer checks. Do not use live resources or credentials merely to make a local check pass.
+
+## Code Review Rules
+
+Apply the [shared review criteria](https://github.com/HoneyDrunkStudios/HoneyDrunk.Standards/blob/main/HoneyDrunk.Standards/docs/CONVENTIONS.md#code-review) to changed behavior, using the repository boundaries above. Report actionable findings with the failing path, concrete impact and a small corrective action; disclose unavailable evidence. These rules grant no cross-repository access or merge authority.
+
+- Keep inference contracts, routing and cost accounting provider-neutral; SDK details stay in provider slots. Verify implemented providers before recommending reuse: external provider stubs and InMemory tests do not establish a working external integration.
+- Trace untrusted prompts/output, tool permissions, tenant context and budget decisions through retries, cancellation and provider failure. Flag prompt-driven authority escalation, context/secret leakage, unbounded token/tool loops or retries that defeat a budget stop.
+- Require routing, cost/usage, isolation and provider-failure contract tests when the changed behavior affects those concerns. Separate deterministic test evidence from model-quality claims; do not invoke paid inference or invent a generic agent framework to complete review.
