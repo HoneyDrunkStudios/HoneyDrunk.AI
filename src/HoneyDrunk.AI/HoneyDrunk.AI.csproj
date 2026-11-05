@@ -2,7 +2,7 @@
   <PropertyGroup><Description>Runtime service registration, routing, policy loading, cost ledger, and telemetry helpers for HoneyDrunk.AI.</Description></PropertyGroup>
   <ItemGroup><ProjectReference Include="..\HoneyDrunk.AI.Abstractions\HoneyDrunk.AI.Abstractions.csproj" /></ItemGroup>
   <ItemGroup>
-    <PackageReference Include="HoneyDrunk.Standards" Version="0.3.0" PrivateAssets="all" />
+    <PackageReference Include="HoneyDrunk.Standards" Version="0.4.1" PrivateAssets="all" />
     <PackageReference Include="HoneyDrunk.Kernel" Version="0.8.1" />
     <PackageReference Include="HoneyDrunk.Vault" Version="0.8.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.12" />
