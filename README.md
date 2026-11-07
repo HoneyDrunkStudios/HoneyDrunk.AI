@@ -31,6 +31,8 @@ services.AddAnthropicModelProvider(options =>
 - `ChatOptions.Temperature` is ignored, because current Anthropic models reject sampling parameters. `MaxOutputTokens` falls back to each model's `DefaultMaxOutputTokens` (16000 unless configured).
 - System messages are joined into the request's system prompt. Tool messages, and conversations ending with an assistant turn (prefill), are rejected before any request is sent.
 - A refusal raises `AnthropicRefusalException` with the model and category. A response cut off at the token limit is returned and logged as a warning.
+- `MaxRetries` and `Timeout` are optional. Left unset, the SDK's defaults apply (currently 2 retries and a 10-minute timeout per attempt). Retries cover connection errors, timeouts, 408, 409, 429 and 5xx. A retried request that the server already finished is billed again, so budget-sensitive hosts should set `MaxRetries` deliberately.
+- A stream that ends before `message_stop` throws `IOException` instead of reporting a finished answer. An SDK timeout surfaces as `TimeoutException`, never as the caller's cancellation.
 - The live smoke test runs only when `HONEYDRUNK_AI_ANTHROPIC_LIVE=1`, `ANTHROPIC_API_KEY` and `HONEYDRUNK_AI_ANTHROPIC_LIVE_MODEL` are set. It spends real tokens, and CI skips it.
 
 ## For downstream consumers — canary projects

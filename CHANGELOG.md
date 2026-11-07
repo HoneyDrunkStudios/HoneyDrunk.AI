@@ -9,6 +9,8 @@
 - Streaming yields text deltas, then one completion update.
 - A refusal raises `AnthropicRefusalException` (model and category) instead of returning empty text. A response cut off at the token limit is returned and logged as a warning.
 - Errors whose text contains the API key are replaced before they leave the provider, including during stream creation and disposal.
+- Optional `MaxRetries` and `Timeout` on `AnthropicProviderOptions`; unset keeps the SDK defaults. The SDK client is owned and disposed by the provider.
+- A stream that ends before `message_stop` throws `IOException`. A streamed answer cut off at the token limit is logged. An SDK timeout surfaces as `TimeoutException` rather than as cancellation.
 
 ### Notes
 

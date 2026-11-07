@@ -23,12 +23,12 @@ public sealed class AnthropicRequestMapperTests
     {
         var request = AnthropicRequestMapper.ToCreateParams(
             "test-model-a",
-            [new(ChatRole.System, "You are a bee."), new(ChatRole.System, "Be brief."), new(ChatRole.User, "hello")],
+            [new(ChatRole.System, "You are a helpful assistant."), new(ChatRole.System, "Be brief."), new(ChatRole.User, "hello")],
             null,
             Model);
 
         var json = Json(request);
-        Assert.Equal("You are a bee.\n\nBe brief.", json.GetProperty("system").GetString());
+        Assert.Equal("You are a helpful assistant.\n\nBe brief.", json.GetProperty("system").GetString());
         Assert.Equal(1, json.GetProperty("messages").GetArrayLength());
     }
 

@@ -60,6 +60,44 @@ public sealed class AnthropicChatClientTests
         Assert.All(updates, u => Assert.Equal("test-model-a", u.ModelId));
     }
 
+    /// <summary>A stream cut off at the token limit completes and is logged once as a warning.</summary>
+    [Fact]
+    public async Task Streaming_logs_once_when_truncated()
+    {
+        var logger = new ListLogger();
+        var api = new FakeMessagesApi { NextEvents = [StreamFixtures.TextDelta("part"), StreamFixtures.MessageDelta("max_tokens"), StreamFixtures.Stop()] };
+        var client = new AnthropicChatClient("test-model-a", Model, api, logger);
+
+        var updates = new List<ChatCompletionUpdate>();
+        await foreach (var update in client.CompleteStreamingAsync([new ChatMessage(ChatRole.User, "go")]))
+        {
+            updates.Add(update);
+        }
+
+        Assert.True(updates[^1].IsComplete);
+        var entry = Assert.Single(logger.Entries);
+        Assert.Equal(LogLevel.Warning, entry.level);
+    }
+
+    /// <summary>A stream that ends before the stop event is an error, not a finished answer.</summary>
+    [Fact]
+    public async Task Streaming_without_stop_event_throws()
+    {
+        var api = new FakeMessagesApi { NextEvents = [StreamFixtures.TextDelta("half an answ")] };
+        var client = new AnthropicChatClient("test-model-a", Model, api, new ListLogger());
+        var updates = new List<ChatCompletionUpdate>();
+
+        await Assert.ThrowsAsync<IOException>(async () =>
+        {
+            await foreach (var update in client.CompleteStreamingAsync([new ChatMessage(ChatRole.User, "hi")]))
+            {
+                updates.Add(update);
+            }
+        });
+
+        Assert.DoesNotContain(updates, u => u.IsComplete);
+    }
+
     /// <summary>A refusal reported mid-stream raises the refusal exception.</summary>
     [Fact]
     public async Task Streaming_throws_on_refusal()

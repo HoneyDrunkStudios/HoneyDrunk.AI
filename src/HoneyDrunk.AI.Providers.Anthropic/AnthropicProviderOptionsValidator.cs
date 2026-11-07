@@ -19,6 +19,16 @@ public static class AnthropicProviderOptionsValidator
             throw new InvalidOperationException("Anthropic provider: at least one model must be configured in Models.");
         }
 
+        if (options.MaxRetries is < 0)
+        {
+            throw new InvalidOperationException("Anthropic provider: MaxRetries cannot be negative.");
+        }
+
+        if (options.Timeout is { } timeout && timeout <= TimeSpan.Zero)
+        {
+            throw new InvalidOperationException("Anthropic provider: Timeout must be positive.");
+        }
+
         var seen = new HashSet<string>(StringComparer.Ordinal);
         foreach (var model in options.Models)
         {

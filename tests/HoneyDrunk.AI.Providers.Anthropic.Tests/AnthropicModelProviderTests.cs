@@ -94,6 +94,53 @@ public sealed class AnthropicModelProviderTests
         Assert.Throws<InvalidOperationException>(() => AnthropicProviderOptionsValidator.Validate(options));
     }
 
+    /// <summary>A negative retry count fails validation.</summary>
+    [Fact]
+    public void Validate_rejects_negative_max_retries()
+    {
+        var options = ValidOptions();
+        options.MaxRetries = -1;
+
+        Assert.Throws<InvalidOperationException>(() => AnthropicProviderOptionsValidator.Validate(options));
+    }
+
+    /// <summary>A zero or negative timeout fails validation.</summary>
+    [Fact]
+    public void Validate_rejects_non_positive_timeout()
+    {
+        var options = ValidOptions();
+        options.Timeout = TimeSpan.Zero;
+
+        Assert.Throws<InvalidOperationException>(() => AnthropicProviderOptionsValidator.Validate(options));
+    }
+
+    /// <summary>Configured retries and timeout reach the SDK client.</summary>
+    [Fact]
+    public void Client_factory_applies_configured_retries_and_timeout()
+    {
+        var options = ValidOptions();
+        options.MaxRetries = 0;
+        options.Timeout = TimeSpan.FromSeconds(90);
+
+        using var client = AnthropicClientFactory.Create(options);
+
+        Assert.Equal(0, client.MaxRetries);
+        Assert.Equal(TimeSpan.FromSeconds(90), client.Timeout);
+        Assert.Equal("sk-test-key", client.ApiKey);
+    }
+
+    /// <summary>Unset retries and timeout keep the SDK's own defaults.</summary>
+    [Fact]
+    public void Client_factory_keeps_sdk_defaults_when_unset()
+    {
+        using var sdkDefaults = new global::Anthropic.AnthropicClient { ApiKey = "x" };
+
+        using var client = AnthropicClientFactory.Create(ValidOptions());
+
+        Assert.Equal(sdkDefaults.MaxRetries, client.MaxRetries);
+        Assert.Equal(sdkDefaults.Timeout, client.Timeout);
+    }
+
     /// <summary>Valid options pass validation.</summary>
     [Fact]
     public void Validate_accepts_valid_options()

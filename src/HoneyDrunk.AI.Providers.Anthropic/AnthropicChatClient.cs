@@ -12,6 +12,7 @@ namespace HoneyDrunk.AI.Providers.Anthropic;
 internal sealed partial class AnthropicChatClient(string modelId, AnthropicModelOptions model, IAnthropicMessagesApi api, ILogger logger) : IChatClient
 {
     private const string RefusalStopReason = "refusal";
+    private const string MaxTokensStopReason = "max_tokens";
 
     private readonly string modelId = string.IsNullOrWhiteSpace(modelId) ? throw new ArgumentException("A model ID is required.", nameof(modelId)) : modelId;
     private readonly AnthropicModelOptions model = model ?? throw new ArgumentNullException(nameof(model));
@@ -36,6 +37,7 @@ internal sealed partial class AnthropicChatClient(string modelId, AnthropicModel
     public async IAsyncEnumerable<ChatCompletionUpdate> CompleteStreamingAsync(IReadOnlyList<ChatMessage> messages, ChatOptions? options = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var request = AnthropicRequestMapper.ToCreateParams(this.modelId, messages, options, this.model);
+        var stopped = false;
         await foreach (var streamEvent in this.api.CreateStreamingAsync(request, cancellationToken).ConfigureAwait(false))
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -43,13 +45,31 @@ internal sealed partial class AnthropicChatClient(string modelId, AnthropicModel
             {
                 yield return new ChatCompletionUpdate(text.Text, false, this.modelId);
             }
-            else if (streamEvent.TryPickDelta(out var messageDelta) && messageDelta.Delta.StopReason?.Raw() == RefusalStopReason)
+            else if (streamEvent.TryPickDelta(out var messageDelta))
             {
-                throw new AnthropicRefusalException(this.modelId, AnthropicResponseMapper.RefusalCategory(messageDelta.Delta.StopDetails));
+                var stopReason = messageDelta.Delta.StopReason?.Raw();
+                if (stopReason == RefusalStopReason)
+                {
+                    throw new AnthropicRefusalException(this.modelId, AnthropicResponseMapper.RefusalCategory(messageDelta.Delta.StopDetails));
+                }
+
+                if (stopReason == MaxTokensStopReason)
+                {
+                    LogTruncated(this.logger, this.modelId);
+                }
+            }
+            else if (streamEvent.TryPickStop(out _))
+            {
+                stopped = true;
             }
         }
 
         cancellationToken.ThrowIfCancellationRequested();
+        if (!stopped)
+        {
+            throw new IOException("Anthropic stream ended before message_stop; the answer may be incomplete.");
+        }
+
         yield return new ChatCompletionUpdate(string.Empty, true, this.modelId);
     }
 

@@ -1,4 +1,3 @@
-using Anthropic;
 using HoneyDrunk.AI.Abstractions.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -25,8 +24,8 @@ public static class AnthropicServiceCollectionExtensions
         services.AddSingleton<IValidateOptions<AnthropicProviderOptions>, AnthropicProviderOptionsValidation>();
         services.AddSingleton<IAnthropicMessagesApi>(provider =>
         {
-            var apiKey = provider.GetRequiredService<IOptions<AnthropicProviderOptions>>().Value.ApiKey;
-            return new AnthropicSdkMessagesApi(new AnthropicClient { ApiKey = apiKey }, apiKey);
+            var options = provider.GetRequiredService<IOptions<AnthropicProviderOptions>>().Value;
+            return new AnthropicSdkMessagesApi(AnthropicClientFactory.Create(options), options.ApiKey);
         });
         services.AddSingleton<IModelProvider, AnthropicModelProvider>();
         return services;
