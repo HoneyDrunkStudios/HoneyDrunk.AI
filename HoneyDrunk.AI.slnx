@@ -9,6 +9,7 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/HoneyDrunk.AI.Abstractions.Tests/HoneyDrunk.AI.Abstractions.Tests.csproj" />
+    <Project Path="tests/HoneyDrunk.AI.Providers.Anthropic.Tests/HoneyDrunk.AI.Providers.Anthropic.Tests.csproj" />
     <Project Path="tests/HoneyDrunk.AI.Providers.InMemory.Tests/HoneyDrunk.AI.Providers.InMemory.Tests.csproj" />
     <Project Path="tests/HoneyDrunk.AI.Tests/HoneyDrunk.AI.Tests.csproj" />
   </Folder>
