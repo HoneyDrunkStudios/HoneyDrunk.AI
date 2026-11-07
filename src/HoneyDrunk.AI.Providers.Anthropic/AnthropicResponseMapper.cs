@@ -1,6 +1,5 @@
 using Anthropic.Models.Messages;
 using HoneyDrunk.AI.Abstractions.Chat;
-using System.Text;
 
 namespace HoneyDrunk.AI.Providers.Anthropic;
 
@@ -24,17 +23,13 @@ internal static class AnthropicResponseMapper
             throw new AnthropicRefusalException(modelId, RefusalCategory(response.StopDetails));
         }
 
-        var text = new StringBuilder();
-        foreach (var block in response.Content)
-        {
-            if (block.TryPickText(out var textBlock))
-            {
-                text.Append(textBlock.Text);
-            }
-        }
+        var text = string.Concat(response.Content
+            .Select(block => block.TryPickText(out var textBlock) ? textBlock : null)
+            .OfType<TextBlock>()
+            .Select(textBlock => textBlock.Text));
 
         var completion = new ChatCompletion(
-            new ChatMessage(ChatRole.Assistant, text.ToString()),
+            new ChatMessage(ChatRole.Assistant, text),
             modelId,
             checked((int)response.Usage.InputTokens),
             checked((int)response.Usage.OutputTokens));
