@@ -29,7 +29,7 @@ public sealed class AnthropicModelProvider(IOptions<AnthropicProviderOptions> op
     public IChatClient GetChatClient(string modelId)
     {
         var model = this.FindModel(modelId);
-        throw new NotSupportedException($"Anthropic chat client for '{model.ModelId}' is wired in a later change ({this.api.GetType().Name}, {this.loggerFactory.GetType().Name}).");
+        return new AnthropicChatClient(model.ModelId, model, this.api, this.loggerFactory.CreateLogger<AnthropicModelProvider>());
     }
 
     /// <inheritdoc />

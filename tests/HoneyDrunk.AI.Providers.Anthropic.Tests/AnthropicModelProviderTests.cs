@@ -37,6 +37,19 @@ public sealed class AnthropicModelProviderTests
         Assert.Contains("test-model-b", error.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>A configured model gets a working chat client over the provider's API seam.</summary>
+    [Fact]
+    public async Task GetChatClient_returns_client_for_configured_model()
+    {
+        var api = new FakeMessagesApi { NextMessage = Fixtures.TextMessage("ok") };
+        var provider = new AnthropicModelProvider(Options.Create(ValidOptions()), api, NullLoggerFactory.Instance);
+
+        var completion = await provider.GetChatClient("test-model-b").CompleteAsync([new HoneyDrunk.AI.Abstractions.Chat.ChatMessage(HoneyDrunk.AI.Abstractions.Chat.ChatRole.User, "hi")]);
+
+        Assert.Equal("ok", completion.Message.Content);
+        Assert.Contains("\"model\": \"test-model-b\"", Assert.Single(api.Requests).ToString(), StringComparison.Ordinal);
+    }
+
     /// <summary>Embeddings are not offered by this provider.</summary>
     [Fact]
     public void GetEmbeddingGenerator_is_not_supported()
