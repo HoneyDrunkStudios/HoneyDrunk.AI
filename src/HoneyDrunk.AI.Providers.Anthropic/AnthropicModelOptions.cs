@@ -15,10 +15,16 @@ public sealed class AnthropicModelOptions
     /// <summary>Gets or sets the output budget used when a caller does not set one.</summary>
     public int DefaultMaxOutputTokens { get; set; } = 16000;
 
-    /// <summary>Gets or sets a value indicating whether the model accepts image input.</summary>
+    /// <summary>
+    /// Gets or sets a value indicating whether the model accepts image input. The provider sends text only, so this must stay
+    /// false; validation rejects true and the provider never declares vision.
+    /// </summary>
     public bool SupportsVision { get; set; }
 
-    /// <summary>Gets or sets a value indicating whether the model supports tool calls.</summary>
+    /// <summary>
+    /// Gets or sets a value indicating whether the model supports tool calls. The chat contract has no tool definitions yet,
+    /// so this must stay false; validation rejects true and the provider never declares tool calling.
+    /// </summary>
     public bool SupportsFunctionCalling { get; set; }
 
     /// <summary>Gets or sets the regions the model may be served from.</summary>

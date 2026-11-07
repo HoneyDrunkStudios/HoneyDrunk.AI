@@ -41,8 +41,8 @@ public sealed class AnthropicModelProvider(IOptions<AnthropicProviderOptions> op
         model.ModelId,
         model.MaxContextTokens,
         SupportsStreaming: true,
-        model.SupportsVision,
-        model.SupportsFunctionCalling,
+        SupportsVision: false,
+        SupportsFunctionCalling: false,
         model.SupportedRegions,
         model.InputCostPerKToken,
         model.OutputCostPerKToken);

@@ -28,6 +28,7 @@ services.AddAnthropicModelProvider(options =>
 
 - Only configured models are served; `GetChatClient` rejects any other ID and lists the configured ones.
 - Chat only: `GetEmbeddingGenerator` throws `NotSupportedException`.
+- Text only: the provider never declares vision or tool calling, so the router never picks it for those requests, and setting `SupportsVision` or `SupportsFunctionCalling` fails validation.
 - `ChatOptions.Temperature` is ignored, because current Anthropic models reject sampling parameters. `MaxOutputTokens` falls back to each model's `DefaultMaxOutputTokens` (16000 unless configured).
 - System messages are joined into the request's system prompt. Tool messages, and conversations ending with an assistant turn (prefill), are rejected before any request is sent.
 - A refusal raises `AnthropicRefusalException` with the model and category. A response cut off at the token limit is returned and logged as a warning.

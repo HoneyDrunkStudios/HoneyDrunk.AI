@@ -42,6 +42,11 @@ public static class AnthropicProviderOptionsValidator
                 throw new InvalidOperationException($"Anthropic provider: model '{model.ModelId}' is configured more than once.");
             }
 
+            if (model.SupportsVision || model.SupportsFunctionCalling)
+            {
+                throw new InvalidOperationException($"Anthropic provider: model '{model.ModelId}' cannot enable vision or tool calling; the provider sends text only.");
+            }
+
             if (model.DefaultMaxOutputTokens < 1)
             {
                 throw new InvalidOperationException($"Anthropic provider: model '{model.ModelId}' needs a DefaultMaxOutputTokens of at least 1.");

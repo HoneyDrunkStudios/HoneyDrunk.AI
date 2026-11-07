@@ -25,6 +25,33 @@ public sealed class AnthropicModelProviderTests
         Assert.Contains(declarations, d => d.ModelId == "test-model-b");
     }
 
+    /// <summary>The provider sends text only, so it never declares vision or tool calling, and the router cannot pick it for them.</summary>
+    [Fact]
+    public void DeclaredCapabilities_never_claim_vision_or_tools()
+    {
+        var options = ValidOptions();
+        options.Models[0].SupportsVision = true;
+        options.Models[0].SupportsFunctionCalling = true;
+
+        var declaration = Assert.Single(CreateProvider(options).DeclaredCapabilities, d => d.ModelId == "test-model-a");
+
+        Assert.False(declaration.SupportsVision);
+        Assert.False(declaration.SupportsFunctionCalling);
+    }
+
+    /// <summary>Configuring a capability the provider does not implement fails validation instead of being silently ignored.</summary>
+    [Fact]
+    public void Validate_rejects_capabilities_the_provider_does_not_implement()
+    {
+        var vision = ValidOptions();
+        vision.Models[0].SupportsVision = true;
+        var tools = ValidOptions();
+        tools.Models[0].SupportsFunctionCalling = true;
+
+        Assert.Throws<InvalidOperationException>(() => AnthropicProviderOptionsValidator.Validate(vision));
+        Assert.Throws<InvalidOperationException>(() => AnthropicProviderOptionsValidator.Validate(tools));
+    }
+
     /// <summary>Rejects a model ID that is not configured and lists the configured ones.</summary>
     [Fact]
     public void GetChatClient_rejects_unconfigured_model()
