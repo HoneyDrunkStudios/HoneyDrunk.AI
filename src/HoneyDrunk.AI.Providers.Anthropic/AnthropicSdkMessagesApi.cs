@@ -1,6 +1,5 @@
 using Anthropic;
 using Anthropic.Models.Messages;
-using System.Runtime.CompilerServices;
 
 namespace HoneyDrunk.AI.Providers.Anthropic;
 
@@ -26,30 +25,6 @@ internal sealed class AnthropicSdkMessagesApi(AnthropicClient client, string api
     }
 
     /// <inheritdoc />
-    public async IAsyncEnumerable<RawMessageStreamEvent> CreateStreamingAsync(MessageCreateParams request, [EnumeratorCancellation] CancellationToken ct)
-    {
-        var enumerator = this.client.Messages.CreateStreaming(request, ct).GetAsyncEnumerator(ct);
-        await using (enumerator.ConfigureAwait(false))
-        {
-            while (true)
-            {
-                bool moved;
-                try
-                {
-                    moved = await enumerator.MoveNextAsync().ConfigureAwait(false);
-                }
-                catch (Exception error) when (error is not OperationCanceledException && !ReferenceEquals(SecretRedaction.Redact(error, this.apiKey), error))
-                {
-                    throw SecretRedaction.Redact(error, this.apiKey);
-                }
-
-                if (!moved)
-                {
-                    yield break;
-                }
-
-                yield return enumerator.Current;
-            }
-        }
-    }
+    public IAsyncEnumerable<RawMessageStreamEvent> CreateStreamingAsync(MessageCreateParams request, CancellationToken ct) =>
+        SecretRedaction.RedactStream(() => this.client.Messages.CreateStreaming(request, ct), this.apiKey, ct);
 }
