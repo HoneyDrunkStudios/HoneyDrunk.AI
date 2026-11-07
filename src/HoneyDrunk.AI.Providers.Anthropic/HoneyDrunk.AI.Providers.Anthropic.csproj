@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <!-- Provider methods are placeholders; do not publish a nonfunctional package. -->
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
-  <PropertyGroup><Description>HoneyDrunk.AI Anthropic provider package.</Description></PropertyGroup>
+  <PropertyGroup><Description>HoneyDrunk.AI Anthropic chat provider over the official Anthropic SDK.</Description></PropertyGroup>
   <ItemGroup><InternalsVisibleTo Include="HoneyDrunk.AI.Providers.Anthropic.Tests" /></ItemGroup>
   <ItemGroup><ProjectReference Include="..\HoneyDrunk.AI.Abstractions\HoneyDrunk.AI.Abstractions.csproj" /></ItemGroup>
   <ItemGroup><PackageReference Include="HoneyDrunk.Standards" Version="0.4.4" PrivateAssets="all" /></ItemGroup>

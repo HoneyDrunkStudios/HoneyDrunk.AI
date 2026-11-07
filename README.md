@@ -7,9 +7,31 @@ HoneyDrunk.AI is the Grid AI Node for inference contracts, model routing, cost a
 - `HoneyDrunk.AI.Abstractions` — D3 contracts for chat, embeddings, providers, routing, capabilities, and cost.
 - `HoneyDrunk.AI` — runtime DI, default model router, cost-first policy, cost ledger, and telemetry constants.
 - `HoneyDrunk.AI.Providers.InMemory` — deterministic local provider for tests, evals, and canaries.
-- `HoneyDrunk.AI.Providers.OpenAI`, `HoneyDrunk.AI.Providers.Anthropic`, `HoneyDrunk.AI.Providers.AzureOpenAI` — ADR-0016 follow-up provider slots.
+- `HoneyDrunk.AI.Providers.Anthropic` — chat provider over the official Anthropic SDK (see below).
+- `HoneyDrunk.AI.Providers.OpenAI`, `HoneyDrunk.AI.Providers.AzureOpenAI` — ADR-0016 follow-up provider slots.
 
-The three external provider slots currently throw `NotImplementedException` and are deliberately non-packable. Releases include only Abstractions, the core runtime, and the working InMemory provider. External provider packages require implementation and validation before their first publication.
+The OpenAI and Azure OpenAI slots still throw `NotImplementedException` and are deliberately non-packable. Releases include Abstractions, the core runtime, the InMemory provider and the Anthropic provider.
+
+## Anthropic provider
+
+```csharp
+services.AddLogging();
+services.AddAnthropicModelProvider(options =>
+{
+    options.ApiKey = apiKeyFromVault;            // never hardcode; the host reads it from Vault
+    foreach (var model in modelsFromAppConfig)   // ids, context sizes and cost rates from App Configuration
+    {
+        options.Models.Add(model);
+    }
+});
+```
+
+- Only configured models are served; `GetChatClient` rejects any other ID and lists the configured ones.
+- Chat only: `GetEmbeddingGenerator` throws `NotSupportedException`.
+- `ChatOptions.Temperature` is ignored, because current Anthropic models reject sampling parameters. `MaxOutputTokens` falls back to each model's `DefaultMaxOutputTokens` (16000 unless configured).
+- System messages are joined into the request's system prompt. Tool messages, and conversations ending with an assistant turn (prefill), are rejected before any request is sent.
+- A refusal raises `AnthropicRefusalException` with the model and category. A response cut off at the token limit is returned and logged as a warning.
+- The live smoke test runs only when `HONEYDRUNK_AI_ANTHROPIC_LIVE=1`, `ANTHROPIC_API_KEY` and `HONEYDRUNK_AI_ANTHROPIC_LIVE_MODEL` are set. It spends real tokens, and CI skips it.
 
 ## For downstream consumers — canary projects
 
@@ -33,10 +55,10 @@ var services = new ServiceCollection()
 
 ## Production host sketch
 
-Register `HoneyDrunk.Vault`/App Configuration in the deployable host, then add `HoneyDrunk.AI` plus a real provider implementation when provider follow-up packets land.
+Register `HoneyDrunk.Vault`/App Configuration in the deployable host, then add `HoneyDrunk.AI` plus a provider such as the Anthropic provider.
 
 ```csharp
 services.AddHoneyDrunkAI();
 // services.AddVault().AddAppConfigurationProvider(...);
-// services.AddModelProvider<OpenAIModelProvider>();
+// services.AddAnthropicModelProvider(options => { /* key from Vault, models from App Configuration */ });
 ```
