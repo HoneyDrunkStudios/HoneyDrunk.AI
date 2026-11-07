@@ -1,6 +1,6 @@
 # HoneyDrunk.AI agent instructions
 
-Own inference contracts, routing, cost accounting and provider slots. The external provider projects are currently non-packable stubs; the InMemory provider is test evidence, not proof of a real external integration. Do not start paid inference to validate documentation.
+Own inference contracts, routing, cost accounting and provider slots. The OpenAI and Azure OpenAI provider projects are still non-packable stubs. The Anthropic provider is implemented, with deterministic tests and an opt-in live smoke test. The InMemory provider is test evidence, not proof of a real external integration. Do not start paid inference to validate documentation.
 
 Start with [README.md](README.md) and the relevant source/tests. Project files and lockfiles own SDK, framework and dependency versions.
 

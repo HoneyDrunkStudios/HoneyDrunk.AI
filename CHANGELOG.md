@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.3.0] - 2026-11-07
+
+### Added
+
+- `HoneyDrunk.AI.Providers.Anthropic` is now a working, packable chat provider over the official Anthropic SDK (`Anthropic` 13.3.0), replacing the ADR-0016 stub. `AddAnthropicModelProvider` registers it as an `IModelProvider`.
+- Models, capability declarations and cost rates come from `AnthropicProviderOptions`, which the host fills from App Configuration; the API key comes from Vault. No model name is built into the package. Options are validated at startup, and validation messages never contain the key.
+- Streaming yields text deltas, then one completion update.
+- A refusal raises `AnthropicRefusalException` (model and category) instead of returning empty text. A response cut off at the token limit is returned and logged as a warning.
+- Errors whose text contains the API key are replaced before they leave the provider, including during stream creation and disposal.
+- Optional `MaxRetries` and `Timeout` on `AnthropicProviderOptions`; unset keeps the SDK defaults. The SDK client is owned and disposed by the provider.
+- A stream that ends before `message_stop` throws `IOException`. A streamed answer cut off at the token limit is logged. An SDK timeout surfaces as `TimeoutException` rather than as cancellation.
+
+### Notes
+
+- Temperature, `top_p` and `top_k` are never sent; current Anthropic models reject them. `ChatOptions.Temperature` is ignored by this provider.
+- Assistant prefill (a conversation ending with an assistant turn) and tool messages are rejected before any request is made.
+- Embeddings are not offered; `GetEmbeddingGenerator` throws `NotSupportedException`.
+- `HoneyDrunk.AI.Abstractions` is unchanged.
+
 ## [0.2.2] - 2026-11-05
 
 ### Changed
