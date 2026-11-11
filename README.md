@@ -2,6 +2,10 @@
 
 HoneyDrunk.AI is the Grid AI Node for inference contracts, model routing, cost accounting, and provider slots established by ADR-0016.
 
+## SDK requirement
+
+Build and test with the .NET 11 SDK selected by `global.json`. Runtime packages target `net11.0`; consuming applications must also target .NET 11 or later. The contracts-only Abstractions package targets both `net10.0` and `net11.0` to preserve existing contract consumers.
+
 ## Packages
 
 - `HoneyDrunk.AI.Abstractions` — D3 contracts for chat, embeddings, providers, routing, capabilities, and cost.

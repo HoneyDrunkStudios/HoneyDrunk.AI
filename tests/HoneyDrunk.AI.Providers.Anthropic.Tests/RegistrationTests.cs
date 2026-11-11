@@ -27,14 +27,14 @@ public sealed class RegistrationTests
 
     /// <summary>Invalid options fail at startup validation, without echoing the key.</summary>
     [Fact]
-    public void Invalid_options_fail_on_start()
+    public async Task Invalid_options_fail_on_start()
     {
         using var services = new ServiceCollection()
             .AddLogging()
             .AddAnthropicModelProvider(options => options.ApiKey = "sk-secret-value")
             .BuildServiceProvider();
 
-        var error = Assert.Throws<OptionsValidationException>(() => services.GetRequiredService<IStartupValidator>().Validate());
+        var error = await Assert.ThrowsAsync<OptionsValidationException>(() => services.GetRequiredService<IAsyncStartupValidator>().ValidateAsync(CancellationToken.None));
         Assert.DoesNotContain("sk-secret-value", error.Message, StringComparison.Ordinal);
     }
 }
