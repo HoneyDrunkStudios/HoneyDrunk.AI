@@ -5,7 +5,7 @@ Runtime DI, default model routing, cost-first policy, in-process cost ledger, an
 ## Install
 
 ```bash
-dotnet add package HoneyDrunk.AI --version 0.2.2
+dotnet add package HoneyDrunk.AI --version 0.3.0
 ```
 
 ## Public API

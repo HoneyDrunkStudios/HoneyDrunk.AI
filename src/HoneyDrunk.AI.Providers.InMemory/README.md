@@ -5,7 +5,7 @@ Deterministic local provider with scripted/default echo chat and deterministic e
 ## Install
 
 ```bash
-dotnet add package HoneyDrunk.AI.Providers.InMemory --version 0.2.2
+dotnet add package HoneyDrunk.AI.Providers.InMemory --version 0.3.0
 ```
 
 ## Public API
